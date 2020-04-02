@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      database: mancala
+      uri: mongodb://localhost:27017/mancala?maxpoolsize=5
+      minConnectionsPerHost: 1
+
+logging:
+  level:
+    org.springframework.web: ERROR
+  com.eduardo.mancala: INFO
