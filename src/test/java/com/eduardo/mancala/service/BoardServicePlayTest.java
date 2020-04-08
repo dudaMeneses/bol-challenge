@@ -6,10 +6,7 @@ import com.eduardo.mancala.model.entity.Board;
 import com.eduardo.mancala.model.request.PlayRequest;
 import com.eduardo.mancala.model.request.data.PlayerEnum;
 import com.eduardo.mancala.repository.BoardRepository;
-import com.eduardo.mancala.service.exception.BoardNotFoundException;
-import com.eduardo.mancala.service.exception.EmptyPitException;
-import com.eduardo.mancala.service.exception.GameFinishedException;
-import com.eduardo.mancala.service.exception.WrongPlayException;
+import com.eduardo.mancala.service.exception.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,6 +48,21 @@ public class BoardServicePlayTest {
                 () -> boardService.play(PlayRequest.builder()
                     .id("1L")
                     .build()
+                )
+        );
+    }
+
+    @Test
+    public void whenPlayFromKallahIndex_shouldThrowIllegalPlayException(){
+        doReturn(Optional.of(BoardHelper.create(PlayerEnum.ONE))).when(boardRepository).findById(anyString());
+
+        assertThrows(
+                IllegalPlayException.class,
+                () -> boardService.play(PlayRequest.builder()
+                        .id("1L")
+                        .player(PlayerEnum.ONE)
+                        .pitIndex(6)
+                        .build()
                 )
         );
     }

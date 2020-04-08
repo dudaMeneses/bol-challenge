@@ -3,7 +3,7 @@ package com.eduardo.mancala.service;
 import com.eduardo.mancala.model.entity.Board;
 import com.eduardo.mancala.model.entity.Line;
 import com.eduardo.mancala.model.entity.Pit;
-import com.eduardo.mancala.model.request.DistributeParameter;
+import com.eduardo.mancala.model.request.Distributer;
 import com.eduardo.mancala.model.request.NextPlay;
 import com.eduardo.mancala.model.request.PlayRequest;
 import com.eduardo.mancala.model.request.data.PlayerEnum;
@@ -45,18 +45,26 @@ public class PitService {
         return playerOne.getPits().get(pitIndex);
     }
 
-    public static Pit getMirrored(DistributeParameter distributeParameter, Board board) {
-        if(PlayerEnum.ONE.equals(distributeParameter.getNext().getPlayer())){
+    public static Integer captureStones(Board board, Distributer distributer) {
+        Pit mirrored = getMirrored(distributer, board);
+        Integer stones = mirrored.getStones() + 1;
+        mirrored.setStones(0);
+
+        return stones;
+    }
+
+    private static Pit getMirrored(Distributer distributer, Board board) {
+        if(PlayerEnum.ONE.equals(distributer.getNext().getPlayer())){
             return getPit(
                     NextPlay.builder()
-                            .index(PitService.getMirroredIndex(distributeParameter.getNext().getIndex()))
+                            .index(PitService.getMirroredIndex(distributer.getNext().getIndex()))
                             .player(PlayerEnum.TWO)
                             .build(),
                     board);
         } else {
             return getPit(
                     NextPlay.builder()
-                            .index(PitService.getMirroredIndex(distributeParameter.getNext().getIndex()))
+                            .index(PitService.getMirroredIndex(distributer.getNext().getIndex()))
                             .player(PlayerEnum.ONE)
                             .build(),
                     board);
