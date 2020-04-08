@@ -104,8 +104,8 @@ public class BoardControllerPlayTest {
     @Test
     public void whenEndsInEmptyPit_shouldCaptureMirroredStonesAndReturnOk() throws Exception {
         Board board = boardRepository.save(new Board());
-        board.getPits().get(3).setStones(0);
-        board.getPits().get(2).setStones(1);
+        board.getPlayerOne().getPits().get(3).setStones(0);
+        board.getPlayerOne().getPits().get(2).setStones(1);
         boardRepository.save(board);
 
         mockMvc.perform(
@@ -139,7 +139,7 @@ public class BoardControllerPlayTest {
     @Test
     public void whenCleanPlayerPits_shouldFinishGameAndReturnOk() throws Exception {
         Board board = boardRepository.save(new Board());
-        IntStream.range(0, 5).forEach(i -> board.getPits().get(i).setStones(0));
+        IntStream.range(0, 5).forEach(i -> board.getPlayerOne().getPits().get(i).setStones(0));
         boardRepository.save(board);
 
         mockMvc.perform(

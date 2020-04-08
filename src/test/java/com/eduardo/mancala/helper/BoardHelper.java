@@ -20,8 +20,14 @@ public class BoardHelper {
 
     public static Board withEmptyPit(PlayerEnum player, int emptyPit) {
         Board board = create(player);
-        board.getPits().get(emptyPit - 1).setStones(1);
-        board.getPits().get(emptyPit).setStones(0);
+
+        if(player.equals(PlayerEnum.ONE)){
+            board.getPlayerOne().getPits().get(emptyPit - 1).setStones(1);
+            board.getPlayerOne().getPits().get(emptyPit).setStones(0);
+        } else {
+            board.getPlayerTwo().getPits().get(emptyPit - 1).setStones(1);
+            board.getPlayerTwo().getPits().get(emptyPit).setStones(0);
+        }
 
         return board;
     }
@@ -35,7 +41,7 @@ public class BoardHelper {
 
     public static Board allCleanExceptLast(PlayerEnum player) {
         Board board = create(player);
-        IntStream.range(0, 5).forEach(i -> board.getPits().get(i).setStones(0));
+        IntStream.range(0, 5).forEach(i -> board.getPlayerOne().getPits().get(i).setStones(0));
         return board;
     }
 }

@@ -16,10 +16,13 @@ public class BoardMatcher {
         return hasProperty("next", equalTo(PlayerEnum.ONE));
     }
 
-    public static Matcher<Board> capturedStones() {
-        return hasProperty("pits", hasItem(
-            hasProperty("stones", equalTo(7))
-        ));
+    public static Matcher<Board> capturedStones(PlayerEnum player) {
+        return hasProperty(PlayerEnum.ONE.equals(player) ? "playerOne" : "playerTwo",
+                    hasProperty("pits", hasItem(
+                            hasProperty("stones", equalTo(7))
+                    )
+                )
+        );
     }
 
     public static Matcher<Board> gameFinished() {

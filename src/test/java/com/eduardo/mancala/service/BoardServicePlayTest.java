@@ -10,6 +10,7 @@ import com.eduardo.mancala.service.exception.BoardNotFoundException;
 import com.eduardo.mancala.service.exception.EmptyPitException;
 import com.eduardo.mancala.service.exception.GameFinishedException;
 import com.eduardo.mancala.service.exception.WrongPlayException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -36,6 +37,10 @@ public class BoardServicePlayTest {
 
     @Captor
     private ArgumentCaptor<Board> captor;
+
+    @BeforeEach
+    public void init(){
+    }
 
     @Test
     public void whenBoardNotFound_shouldThrowBoardNotFoundException(){
@@ -142,7 +147,7 @@ public class BoardServicePlayTest {
     }
 
     @Test
-    public void whenLastStoneGoesToEmptyPit_shouldCaptureMirroredPitStones(){
+    public void whenLastStoneGoesToEmptyPlayerOnePit_shouldCaptureMirroredPitStones(){
         doReturn(Optional.of(BoardHelper.withEmptyPit(PlayerEnum.ONE, 2))).when(boardRepository).findById(anyString());
         doReturn(BoardHelper.create(PlayerEnum.TWO)).when(boardRepository).save(captor.capture());
 
@@ -154,7 +159,23 @@ public class BoardServicePlayTest {
                         .build()
         );
 
-        assertThat(captor.getValue(), BoardMatcher.capturedStones());
+        assertThat(captor.getValue(), BoardMatcher.capturedStones(PlayerEnum.ONE));
+    }
+
+    @Test
+    public void whenLastStoneGoesToEmptyPlayerTwoPit_shouldCaptureMirroredPitStones(){
+        doReturn(Optional.of(BoardHelper.withEmptyPit(PlayerEnum.TWO, 2))).when(boardRepository).findById(anyString());
+        doReturn(BoardHelper.create(PlayerEnum.ONE)).when(boardRepository).save(captor.capture());
+
+        boardService.play(
+                PlayRequest.builder()
+                        .id("1L")
+                        .player(PlayerEnum.TWO)
+                        .pitIndex(1)
+                        .build()
+        );
+
+        assertThat(captor.getValue(), BoardMatcher.capturedStones(PlayerEnum.TWO));
     }
 
     @Test
