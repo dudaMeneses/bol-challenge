@@ -1,6 +1,7 @@
 package com.eduardo.mancala.service;
 
 import com.eduardo.mancala.model.entity.Board;
+import com.eduardo.mancala.model.entity.Line;
 import com.eduardo.mancala.model.entity.Pit;
 import com.eduardo.mancala.model.request.DistributeParameter;
 import com.eduardo.mancala.model.request.NextPlay;
@@ -26,18 +27,22 @@ public class PitService {
         if(PlayerEnum.ONE.equals(nextPlay.getPlayer())){
             return KALLAH_INDEX.equals(nextPlay.getIndex()) ?
                     board.getPlayerOne().getKallah() :
-                    board.getPlayerOne().getPits().get(nextPlay.getIndex());
+                    getPit(board.getPlayerOne(), nextPlay.getIndex());
         } else {
             return KALLAH_INDEX.equals(nextPlay.getIndex()) ?
                     board.getPlayerTwo().getKallah() :
-                    board.getPlayerTwo().getPits().get(nextPlay.getIndex());
+                    getPit(board.getPlayerTwo(), nextPlay.getIndex());
         }
     }
 
     public static Pit getPit(PlayRequest request, Board board) {
         return PlayerEnum.ONE.equals(request.getPlayer()) ?
-                board.getPlayerOne().getPits().get(request.getPitIndex()) :
-                board.getPlayerTwo().getPits().get(request.getPitIndex());
+                getPit(board.getPlayerOne(), request.getPitIndex()) :
+                getPit(board.getPlayerTwo(), request.getPitIndex());
+    }
+
+    private static Pit getPit(Line playerOne, Integer pitIndex) {
+        return playerOne.getPits().get(pitIndex);
     }
 
     public static Pit getMirrored(DistributeParameter distributeParameter, Board board) {
@@ -61,4 +66,5 @@ public class PitService {
     private static Integer getMirroredIndex(Integer index) {
         return 5 - index;
     }
+
 }
