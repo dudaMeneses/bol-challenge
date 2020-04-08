@@ -24,6 +24,9 @@ public class BoardServiceCreateTest {
     @Mock
     private BoardRepository boardRepository;
 
+    @Mock
+    private PitService pitService;
+
     @Test
     public void whenHappyPath_shouldReturnDefaultBoard(){
         doReturn(BoardHelper.create(PlayerEnum.ONE)).when(boardRepository).save(any(Board.class));

@@ -28,6 +28,9 @@ public class BoardServiceFindByIdTest {
     @Mock
     private BoardRepository boardRepository;
 
+    @Mock
+    private PitService pitService;
+
     @Test
     public void whenHappyPath_shouldReturnDefaultBoard(){
         doReturn(Optional.of(BoardHelper.create(PlayerEnum.ONE))).when(boardRepository).findById(anyString());
